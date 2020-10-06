@@ -9,7 +9,7 @@ public class Warrior extends Character {
     void attack(Character characterToAttack) {
         Random random = new Random();
         if (characterToAttack.getIsAlive()) {
-            characterToAttack.setHealth(characterToAttack.getHealth() - random.nextInt(9));
+            characterToAttack.setHealth(characterToAttack.getHealth() - (random.nextInt(8) + 1));
             if (characterToAttack.getHealth() <= 0) {
                 characterToAttack.setAlive(false);
                 characterToAttack.setHealth(0);
