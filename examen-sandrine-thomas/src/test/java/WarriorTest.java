@@ -4,45 +4,64 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class WarriorTest {
-    Character warrior;
-    Character warrior2;
+    Faction hordeFaction;
+    Faction allianceFaction;
+    Character priestHorde;
+    Character warriorHorde;
+    Character priestAlliance;
+    Character warriorAlliance;
 
     @BeforeEach
     void init() {
-        warrior = new Warrior("Warrior");
-        warrior2 = new Warrior("Warrior2");
+        hordeFaction = new Faction("Horde");
+        warriorHorde = new Warrior("Garrosh Hellscream");
+        priestHorde = new Priest("Talanji");
+        allianceFaction = new Faction("Alliance");
+        warriorAlliance = new Warrior("Varian Wrynn");
+        priestAlliance = new Priest("Anduin Wrynn");
     }
 
     @Test
-    @DisplayName("A warrior have a name, a health and is alive")
-    void warriorExists() {
-        Assert.assertEquals("Warrior", warrior.getName());
-        Assert.assertEquals(100, warrior.getHealth());
-        Assert.assertTrue(warrior.getIsAlive());
-    }
-
-    @Test
-    @DisplayName("A warrior can attack another character")
+    @DisplayName("A warrior can attack a character of another faction")
     void warriorAttacks() {
-        warrior.attack(warrior2);
-        Assert.assertTrue(warrior2.getHealth() <= 100);
+        warriorHorde.joinFaction(hordeFaction);
+        priestAlliance.joinFaction(allianceFaction);
+        warriorHorde.attack(priestAlliance);
+        Assert.assertTrue(priestAlliance.getHealth() < 100);
     }
 
     @Test
-    @DisplayName("A warrior can kill another character")
+    @DisplayName("A warrior can't attack a character of his faction")
+    void warriorAttacksFaction() {
+        warriorHorde.joinFaction(hordeFaction);
+        priestHorde.joinFaction(hordeFaction);
+        try {
+            warriorHorde.attack(priestHorde);
+            Assert.assertTrue(priestHorde.getHealth() < 100);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack another character of the same faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("A warrior can kill a character of another faction")
     void warriorKills() {
-        warrior2.setHealth(1);
-        Assert.assertTrue(warrior2.getIsAlive());
-        warrior.attack(warrior2);
-        Assert.assertFalse(warrior2.getIsAlive());
+        warriorHorde.joinFaction(hordeFaction);
+        priestAlliance.joinFaction(allianceFaction);
+        priestAlliance.setHealth(1);
+        Assert.assertTrue(priestAlliance.getIsAlive());
+        warriorHorde.attack(priestAlliance);
+        Assert.assertFalse(priestAlliance.getIsAlive());
     }
 
     @Test
     @DisplayName("A warrior can heals himself ")
     void warriorHealsHimself() {
-        warrior.setHealth(50);
-        warrior.heal(warrior);
-        Assert.assertEquals(51,warrior.getHealth());
+        warriorHorde.setHealth(50);
+        warriorHorde.heal(warriorHorde);
+        Assert.assertEquals(51,warriorHorde.getHealth());
     }
 
     @Test
@@ -50,8 +69,8 @@ public class WarriorTest {
     void warriorHealsAnotherCharacter() {
         try
         {
-            warrior2.setHealth(50);
-            warrior.heal(warrior2);
+            priestHorde.setHealth(50);
+            warriorHorde.heal(priestHorde);
         }
         catch(RuntimeException re)
         {
@@ -64,9 +83,9 @@ public class WarriorTest {
     @DisplayName("A warrior deals between 0 and 9 dammage ")
     void warriorDammages() {
         for(int i = 0; i < 50; i++) {
-            warrior2.setHealth(50);
-            warrior.attack(warrior2);
-            Assert.assertTrue((50 - warrior2.getHealth() <= 9) && (50 - warrior2.getHealth() >= 0));
+            priestAlliance.setHealth(50);
+            warriorHorde.attack(priestAlliance);
+            Assert.assertTrue((50 - priestAlliance.getHealth() <= 9) && (50 - priestAlliance.getHealth() >= 0));
         }
     }
 }

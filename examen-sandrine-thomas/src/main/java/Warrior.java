@@ -7,15 +7,18 @@ public class Warrior extends Character {
 
     @Override
     void attack(Character characterToAttack) {
-        Random random = new Random();
+        if (this.getFaction() != null && characterToAttack.getFaction() == this.getFaction()) {
+            throw new UnsupportedOperationException("A character can't attack another character of the same faction");
+        }
         if (characterToAttack.getIsAlive()) {
+            Random random = new Random();
             characterToAttack.setHealth(characterToAttack.getHealth() - (random.nextInt(8) + 1));
             if (characterToAttack.getHealth() <= 0) {
                 characterToAttack.setAlive(false);
                 characterToAttack.setHealth(0);
             }
         } else {
-           throw new UnsupportedOperationException("It seems useless to attack a dead character");
+           throw new UnsupportedOperationException("A character can't attack a dead character");
         }
     }
 
@@ -25,5 +28,13 @@ public class Warrior extends Character {
         } else {
             throw new UnsupportedOperationException("A warrior can only heals himself");
         }
+    }
+
+    @Override
+    public String toString() {
+        String factionName = this.getFaction() == null ? "None" : this.getFaction().getName();
+        return this.getName() + " : Warrior\n"
+                + "Health : " + this.getHealth() + "/100\n"
+                + "Faction : " + factionName;
     }
 }
