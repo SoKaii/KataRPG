@@ -6,51 +6,72 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 public class CharacterTest {
-    Faction hordeFaction;
-    Faction allianceFaction;
-    Character priestHorde;
-    Character warriorHorde;
-    Character priestAlliance;
-    Character warriorAlliance;
+    Faction orgrimmarFaction;
+    Faction stormwindFaction;
+    Faction darkspearFaction;
+    Faction darnassusFaction;
+
+    Character priestDarkspear;
+    Character warriorDarkspear;
+    Character priestOrgrimmar;
+    Character warriorOrgrimmar;
+
+    Character priestStormwind;
+    Character warriorStormwind;
+    Character priestDarnassus;
+    Character warriorDarnassus;
 
     @BeforeEach
     void init() {
-        hordeFaction = new Faction("Horde");
-        warriorHorde = new Warrior("Garrosh Hellscream");
-        priestHorde = new Priest("Talanji");
-        allianceFaction = new Faction("Alliance");
-        warriorAlliance = new Warrior("Varian Wrynn");
-        priestAlliance = new Priest("Anduin Wrynn");
+        // Horde factions
+        orgrimmarFaction = new Faction("Orgrimmar");
+        darkspearFaction = new Faction("Darkspear Trolls");
+
+        // Alliance factions
+        stormwindFaction = new Faction("Stormwind");
+        darnassusFaction = new Faction("Darnassus");
+
+        // Horde characters
+        warriorOrgrimmar = new Warrior("Garrosh Hellscream");
+        priestOrgrimmar = new Priest("Tyelis");
+        warriorDarkspear = new Warrior("Paal'gajuk");
+        priestDarkspear = new Priest("Talanji");
+
+        // Alliance characters
+        warriorStormwind = new Warrior("Varian Wrynn");
+        priestStormwind = new Priest("Anduin Wrynn");
+        warriorDarnassus = new Warrior("Sildanair");
+        priestDarnassus = new Priest("Tyrande Whisperwind");
     }
 
     @Test
     @DisplayName("A character have a name, a health and is alive")
     void characterExist() {
-        Assert.assertEquals("Garrosh Hellscream", warriorHorde.getName());
-        Assert.assertEquals(100, warriorHorde.getHealth());
-        Assert.assertTrue(warriorHorde.getIsAlive());
-        Assert.assertEquals("Anduin Wrynn", priestAlliance.getName());
-        Assert.assertEquals(100, priestAlliance.getHealth());
-        Assert.assertTrue(priestAlliance.getIsAlive());
+        Assert.assertEquals("Garrosh Hellscream", warriorOrgrimmar.getName());
+        Assert.assertEquals(100, warriorOrgrimmar.getHealth());
+        Assert.assertTrue(warriorOrgrimmar.getIsAlive());
+        Assert.assertEquals("Anduin Wrynn", priestStormwind.getName());
+        Assert.assertEquals(100, priestStormwind.getHealth());
+        Assert.assertTrue(priestStormwind.getIsAlive());
     }
 
     @Test
     @DisplayName("If a character have 0 hp, he's dead")
     void characterIsDead() {
-        priestHorde.setHealth(0);
-        Assert.assertFalse(priestHorde.getIsAlive());
-        warriorHorde.setHealth(0);
-        Assert.assertFalse(warriorHorde.getIsAlive());
+        priestDarkspear.setHealth(0);
+        Assert.assertFalse(priestDarkspear.getIsAlive());
+        warriorOrgrimmar.setHealth(0);
+        Assert.assertFalse(warriorOrgrimmar.getIsAlive());
     }
 
     @Test
     @DisplayName("A character can join a faction")
     void characterJoinFaction() {
         ArrayList<Character> expectedList = new ArrayList<>();
-        Assert.assertEquals(expectedList, hordeFaction.getMembers());
-        priestHorde.joinFaction(hordeFaction);
-        expectedList.add(priestHorde);
-        Assert.assertEquals(expectedList, hordeFaction.getMembers());
+        Assert.assertEquals(expectedList, orgrimmarFaction.getMembers());
+        priestDarkspear.joinFaction(orgrimmarFaction);
+        expectedList.add(priestDarkspear);
+        Assert.assertEquals(expectedList, orgrimmarFaction.getMembers());
     }
 
     @Test
@@ -58,8 +79,8 @@ public class CharacterTest {
     void characterJoinTwoFaction() {
         try
         {
-            priestHorde.joinFaction(hordeFaction);
-            priestHorde.joinFaction(allianceFaction);
+            priestDarkspear.joinFaction(darkspearFaction);
+            priestDarkspear.joinFaction(orgrimmarFaction);
         }
         catch(RuntimeException re)
         {
@@ -73,13 +94,13 @@ public class CharacterTest {
     @DisplayName("A character can leave a faction")
     void characterLeaveFaction() {
         ArrayList<Character> expectedList = new ArrayList<>();
-        expectedList.add(priestHorde);
-        priestHorde.joinFaction(hordeFaction);
-        Assert.assertEquals(expectedList, hordeFaction.getMembers());
+        expectedList.add(priestDarkspear);
+        priestDarkspear.joinFaction(darkspearFaction);
+        Assert.assertEquals(expectedList, darkspearFaction.getMembers());
 
-        priestHorde.leaveFaction();
-        expectedList.remove(priestHorde);
-        Assert.assertEquals(expectedList, hordeFaction.getMembers());
+        priestDarkspear.leaveFaction();
+        expectedList.remove(priestDarkspear);
+        Assert.assertEquals(expectedList, orgrimmarFaction.getMembers());
     }
 
     @Test
@@ -87,7 +108,7 @@ public class CharacterTest {
     void characterLeaveNullFaction() {
         try
         {
-           priestHorde.leaveFaction();
+           priestDarkspear.leaveFaction();
         }
         catch(RuntimeException re)
         {

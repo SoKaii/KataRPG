@@ -1,16 +1,16 @@
 public class Main {
     public static void main(String[] args) {
-        Faction hordeFaction = new Faction("Horde");;
-        Faction allianceFaction = new Faction("Alliance");;
-        Character priestHorde = new Priest("Talanji");
-        Character warriorHorde = new Warrior("Garrosh Hellscream");
-        Character priestAlliance = new Warrior("Anduin Wrynn");
-        Character warriorAlliance = new Warrior("Varian Wrynn");
-        priestAlliance.joinFaction(allianceFaction);
-        warriorAlliance.joinFaction(allianceFaction);
-        priestHorde.joinFaction(hordeFaction);
-        warriorHorde.joinFaction(hordeFaction);
+        Faction orgrimmarFaction = new Faction("Orgrimmar");;
+        Faction stormwindFaction = new Faction("Stormwind");;
+        Character priestDarkspear = new Priest("Talanji");
+        Character warriorOrgrimmar = new Warrior("Garrosh Hellscream");
+        Character priestStormwind = new Warrior("Anduin Wrynn");
+        Character warriorStormwind = new Warrior("Varian Wrynn");
+        priestStormwind.joinFaction(stormwindFaction);
+        warriorStormwind.joinFaction(stormwindFaction);
+        priestDarkspear.joinFaction(orgrimmarFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
 
-        System.out.println(warriorAlliance.toString());
+        System.out.println(warriorStormwind.toString());
     }
 }

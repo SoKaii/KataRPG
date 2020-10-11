@@ -7,8 +7,10 @@ public class Warrior extends Character {
 
     @Override
     void attack(Character characterToAttack) {
-        if (this.getFaction() != null && characterToAttack.getFaction() == this.getFaction()) {
-            throw new UnsupportedOperationException("A character can't attack another character of the same faction");
+        if (this.getFaction() != null &&
+                (characterToAttack.getFaction() == this.getFaction() ||
+                        this.getFaction().getFriends().contains(characterToAttack.getFaction()))) {
+            throw new UnsupportedOperationException("A character can't attack another character of his faction or friend faction");
         }
         if (characterToAttack.getIsAlive()) {
             Random random = new Random();

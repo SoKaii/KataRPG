@@ -4,21 +4,42 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class PriestTest {
-    Faction hordeFaction;
-    Faction allianceFaction;
-    Character priestHorde;
-    Character warriorHorde;
-    Character priestAlliance;
-    Character warriorAlliance;
+    Faction orgrimmarFaction;
+    Faction stormwindFaction;
+    Faction darkspearFaction;
+    Faction darnassusFaction;
+
+    Character priestDarkspear;
+    Character warriorDarkspear;
+    Character priestOrgrimmar;
+    Character warriorOrgrimmar;
+
+    Character priestStormwind;
+    Character warriorStormwind;
+    Character priestDarnassus;
+    Character warriorDarnassus;
 
     @BeforeEach
     void init() {
-        hordeFaction = new Faction("Horde");
-        warriorHorde = new Warrior("Garrosh Hellscream");
-        priestHorde = new Priest("Talanji");
-        allianceFaction = new Faction("Alliance");
-        warriorAlliance = new Warrior("Varian Wrynn");
-        priestAlliance = new Priest("Anduin Wrynn");
+        // Horde factions
+        orgrimmarFaction = new Faction("Orgrimmar");
+        darkspearFaction = new Faction("Darkspear Trolls");
+
+        // Alliance factions
+        stormwindFaction = new Faction("Stormwind");
+        darnassusFaction = new Faction("Darnassus");
+
+        // Horde characters
+        warriorOrgrimmar = new Warrior("Garrosh Hellscream");
+        priestOrgrimmar = new Priest("Tyelis");
+        warriorDarkspear = new Warrior("Paal'gajuk");
+        priestDarkspear = new Priest("Talanji");
+
+        // Alliance characters
+        warriorStormwind = new Warrior("Varian Wrynn");
+        priestStormwind = new Priest("Anduin Wrynn");
+        warriorDarnassus = new Warrior("Sildanair");
+        priestDarnassus = new Priest("Tyrande Whisperwind");
     }
 
     @Test
@@ -26,7 +47,7 @@ public class PriestTest {
     void priestAttack() {
         try
         {
-           priestHorde.attack(warriorAlliance);
+           priestDarkspear.attack(warriorStormwind);
         }
         catch(RuntimeException re)
         {
@@ -37,29 +58,41 @@ public class PriestTest {
 
     @Test
     @DisplayName("A priest can heal another character of his faction between 5 and 10 hp ")
-    void priestHealsAnotherCharacter() {
-        priestHorde.joinFaction(hordeFaction);
-        warriorHorde.joinFaction(hordeFaction);
+    void priestHealsAnotherCharacterOfFaction() {
+        priestOrgrimmar.joinFaction(orgrimmarFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
         for(int i = 0; i < 50; i++) {
-            warriorHorde.setHealth(50);
-            priestHorde.heal(warriorHorde);
-            Assert.assertTrue((warriorHorde.getHealth() - 50 <= 10) && (warriorHorde.getHealth() - 50 >= 5));
+            warriorOrgrimmar.setHealth(50);
+            priestDarkspear.heal(warriorOrgrimmar);
+            Assert.assertTrue((warriorOrgrimmar.getHealth() - 50 <= 10) && (warriorOrgrimmar.getHealth() - 50 >= 5));
+        }
+    }
+
+    @Test //TODO
+    @DisplayName("A priest can heal another character of a friend's faction between 5 and 10 hp ")
+    void priestHealsAnotherCharacterOfFriendFaction() {
+        priestDarkspear.joinFaction(orgrimmarFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        for(int i = 0; i < 50; i++) {
+            warriorOrgrimmar.setHealth(50);
+            priestDarkspear.heal(warriorOrgrimmar);
+            Assert.assertTrue((warriorOrgrimmar.getHealth() - 50 <= 10) && (warriorOrgrimmar.getHealth() - 50 >= 5));
         }
     }
 
     @Test
     @DisplayName("A priest can't heal a character of another faction")
     void priestHealsACharacterOfAnotherFaction() {
-        priestHorde.joinFaction(hordeFaction);
-        warriorAlliance.joinFaction(allianceFaction);
+        priestDarkspear.joinFaction(darkspearFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
         try
         {
-            warriorAlliance.setHealth(50);
-            priestHorde.heal(warriorAlliance);
+            warriorOrgrimmar.setHealth(50);
+            priestDarkspear.heal(warriorOrgrimmar);
         }
         catch(RuntimeException re)
         {
-            String expectedException = "A character can only heal another character of the same faction";
+            String expectedException = "A character can only heal another character of his faction or friend faction";
             Assert.assertEquals(expectedException, re.getMessage());
         }
     }
@@ -68,9 +101,9 @@ public class PriestTest {
     @DisplayName("A priest can heal himself between 5 and 10 hp ")
     void priestHealsHimself() {
         for(int i = 0; i < 50; i++) {
-            priestHorde.setHealth(50);
-            priestHorde.heal(priestHorde);
-            Assert.assertTrue((priestHorde.getHealth() - 50 <= 10) && (priestHorde.getHealth() - 50 >= 5));
+            priestDarkspear.setHealth(50);
+            priestDarkspear.heal(priestDarkspear);
+            Assert.assertTrue((priestDarkspear.getHealth() - 50 <= 10) && (priestDarkspear.getHealth() - 50 >= 5));
         }
     }
 }
