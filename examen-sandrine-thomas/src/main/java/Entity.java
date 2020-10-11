@@ -1,11 +1,10 @@
 public class Entity {
-
+    private final String name;
     private int health;
-    private boolean isAlive;
 
-    public Entity() {
+    public Entity(String name) {
+        this.name = name;
         this.health = 100;
-        this.isAlive = true;
     }
 
     public int getHealth() {
@@ -13,14 +12,14 @@ public class Entity {
     }
 
     public boolean getIsAlive() {
-        return isAlive;
+        return health > 0;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setHealth(int health) {
         this.health = health;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
     }
 }

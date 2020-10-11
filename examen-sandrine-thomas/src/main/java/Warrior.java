@@ -16,7 +16,6 @@ public class Warrior extends Character {
             Random random = new Random();
             characterToAttack.setHealth(characterToAttack.getHealth() - (random.nextInt(8) + 1));
             if (characterToAttack.getHealth() <= 0) {
-                characterToAttack.setAlive(false);
                 characterToAttack.setHealth(0);
             }
         } else {

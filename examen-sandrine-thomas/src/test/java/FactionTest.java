@@ -2,7 +2,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 
 public class FactionTest {
@@ -10,6 +9,7 @@ public class FactionTest {
     Faction stormwindFaction;
     Faction darkspearFaction;
     Faction darnassusFaction;
+    Faction ironforgeFaction;
 
     Character priestDarkspear;
     Character warriorDarkspear;
@@ -20,6 +20,8 @@ public class FactionTest {
     Character warriorStormwind;
     Character priestDarnassus;
     Character warriorDarnassus;
+    Character priestIronforge;
+    Character warriorIronforge;
 
     @BeforeEach
     void init() {
@@ -30,6 +32,7 @@ public class FactionTest {
         // Alliance factions
         stormwindFaction = new Faction("Stormwind");
         darnassusFaction = new Faction("Darnassus");
+        ironforgeFaction = new Faction("Ironforge");
 
         // Horde characters
         warriorOrgrimmar = new Warrior("Garrosh Hellscream");
@@ -42,6 +45,8 @@ public class FactionTest {
         priestStormwind = new Priest("Anduin Wrynn");
         warriorDarnassus = new Warrior("Sildanair");
         priestDarnassus = new Priest("Tyrande Whisperwind");
+        warriorIronforge = new Warrior("Muradin Bronzebeard");
+        priestIronforge = new Priest("Moira Thaurissan");
     }
 
     @Test
@@ -72,5 +77,27 @@ public class FactionTest {
         orgrimmarFaction.addMember(priestOrgrimmar);
         orgrimmarFaction.removeMember(priestOrgrimmar);
         Assert.assertEquals(expectedList,orgrimmarFaction.getMembers());
+    }
+
+    @Test
+    @DisplayName("A Faction can declare one friend")
+    void factionAddOneFriend(){
+        ArrayList<Faction> expectedList = new ArrayList<>();
+        expectedList.add(darnassusFaction);
+
+        stormwindFaction.addFriend(darnassusFaction);
+        Assert.assertEquals(expectedList, stormwindFaction.getFriends());
+    }
+
+    @Test
+    @DisplayName("A Faction can declare multiple friends")
+    void factionAddMultipleFriend(){
+        ArrayList<Faction> expectedList = new ArrayList<>();
+        expectedList.add(darnassusFaction);
+        expectedList.add(ironforgeFaction);
+
+        stormwindFaction.addFriend(darnassusFaction);
+        stormwindFaction.addFriend(ironforgeFaction);
+        Assert.assertEquals(expectedList, stormwindFaction.getFriends());
     }
 }

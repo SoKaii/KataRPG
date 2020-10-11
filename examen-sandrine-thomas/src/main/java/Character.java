@@ -1,16 +1,12 @@
-public abstract class Character {
-    private final String name;
-    private int health;
-    private boolean isAlive;
+public abstract class Character extends Entity {
     private Faction faction;
 
     abstract void attack(Character characterToAttack);
     abstract void heal(Character characterToHeal);
 
     public Character(String name) {
-        this.name = name;
-        this.health = 100;
-        this.isAlive = true;
+        super(name);
+        this.setHealth(100);
     }
 
     void joinFaction(Faction factionJoined) {
@@ -29,29 +25,6 @@ public abstract class Character {
             this.faction.removeMember(this);
             this.faction = null;
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-        if (health == 0) {
-            setAlive(false);
-        }
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public boolean getIsAlive() {
-        return isAlive;
     }
 
     public Faction getFaction() {
