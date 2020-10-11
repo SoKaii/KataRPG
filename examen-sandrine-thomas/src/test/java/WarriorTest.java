@@ -19,6 +19,8 @@ public class WarriorTest {
     Character priestDarnassus;
     Character warriorDarnassus;
 
+    Entity trainingDummy;
+
     @BeforeEach
     void init() {
         // Horde factions
@@ -40,6 +42,9 @@ public class WarriorTest {
         priestStormwind = new Priest("Anduin Wrynn");
         warriorDarnassus = new Warrior("Sildanair");
         priestDarnassus = new Priest("Tyrande Whisperwind");
+
+        // Non-characters entities
+        trainingDummy = new Entity("Training Dummy");
     }
 
     @Test
@@ -49,6 +54,26 @@ public class WarriorTest {
         priestStormwind.joinFaction(stormwindFaction);
         warriorOrgrimmar.attack(priestStormwind);
         Assert.assertTrue(priestStormwind.getHealth() < 100);
+    }
+
+    @Test
+    @DisplayName("A warrior can attack a non-character entity")
+    void warriorAttacksNonCharacterEntity() {
+        warriorOrgrimmar.attack(trainingDummy);
+        Assert.assertTrue(trainingDummy.getHealth() < 100);
+    }
+
+    @Test
+    @DisplayName("A warrior can't attack a dead entity")
+    void warriorAttacksDeadCharacter() {
+        warriorDarnassus.setHealth(0);
+        try {
+            warriorOrgrimmar.attack(warriorDarnassus);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack a dead entity";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
     }
 
     @Test
@@ -89,9 +114,9 @@ public class WarriorTest {
         warriorOrgrimmar.joinFaction(orgrimmarFaction);
         priestStormwind.joinFaction(stormwindFaction);
         priestStormwind.setHealth(1);
-        Assert.assertTrue(priestStormwind.getIsAlive());
+        Assert.assertTrue(priestStormwind.isAlive());
         warriorOrgrimmar.attack(priestStormwind);
-        Assert.assertFalse(priestStormwind.getIsAlive());
+        Assert.assertFalse(priestStormwind.isAlive());
     }
 
     @Test

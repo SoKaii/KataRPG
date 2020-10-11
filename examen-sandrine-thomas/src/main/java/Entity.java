@@ -11,7 +11,7 @@ public class Entity {
         return health;
     }
 
-    public boolean getIsAlive() {
+    public boolean isAlive() {
         return health > 0;
     }
 
@@ -21,5 +21,11 @@ public class Entity {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() + " : Entity\n"
+                + "Health : " + this.getHealth() + "/100\n";
     }
 }

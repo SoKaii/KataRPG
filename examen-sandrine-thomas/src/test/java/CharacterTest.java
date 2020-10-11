@@ -49,19 +49,19 @@ public class CharacterTest {
     void characterExist() {
         Assert.assertEquals("Garrosh Hellscream", warriorOrgrimmar.getName());
         Assert.assertEquals(100, warriorOrgrimmar.getHealth());
-        Assert.assertTrue(warriorOrgrimmar.getIsAlive());
+        Assert.assertTrue(warriorOrgrimmar.isAlive());
         Assert.assertEquals("Anduin Wrynn", priestStormwind.getName());
         Assert.assertEquals(100, priestStormwind.getHealth());
-        Assert.assertTrue(priestStormwind.getIsAlive());
+        Assert.assertTrue(priestStormwind.isAlive());
     }
 
     @Test
     @DisplayName("If a character have 0 hp, he's dead")
     void characterIsDead() {
         priestDarkspear.setHealth(0);
-        Assert.assertFalse(priestDarkspear.getIsAlive());
+        Assert.assertFalse(priestDarkspear.isAlive());
         warriorOrgrimmar.setHealth(0);
-        Assert.assertFalse(warriorOrgrimmar.getIsAlive());
+        Assert.assertFalse(warriorOrgrimmar.isAlive());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class CharacterTest {
         priestDarkspear.joinFaction(darkspearFaction);
         Assert.assertEquals(expectedList, darkspearFaction.getMembers());
 
-        priestDarkspear.leaveFaction();
+        priestDarkspear.leaveFaction(darkspearFaction);
         expectedList.remove(priestDarkspear);
         Assert.assertEquals(expectedList, orgrimmarFaction.getMembers());
     }
@@ -108,7 +108,7 @@ public class CharacterTest {
     void characterLeaveNullFaction() {
         try
         {
-           priestDarkspear.leaveFaction();
+           priestDarkspear.leaveFaction(darkspearFaction);
         }
         catch(RuntimeException re)
         {

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Priest extends Character {
@@ -6,23 +7,21 @@ public class Priest extends Character {
         super(name);
     }
 
-    void attack(Character characterToAttack) {
+    void attack(Entity entityToAttack) {
         throw new UnsupportedOperationException("A priest can't attack");
     }
 
     void heal(Character characterToHeal) {
-        if (characterToHeal.getFaction() != this.getFaction() && (!this.getFaction().getFriends().contains(characterToHeal.getFaction()))) {
+        ArrayList<Faction> factionsToHeal = new ArrayList<>(this.getFactions());
+        for (Faction faction : this.getFactions()) {
+            for (Faction friendFaction : faction.getFriends()) {
+                factionsToHeal.add(friendFaction);
+            }
+        }
+        if ((factionsToHeal.stream().filter(faction -> characterToHeal.getFactions().contains(faction))).count() == 0 && characterToHeal != this) {
             throw new UnsupportedOperationException("A character can only heal another character of his faction or friend faction");
         }
         Random random = new Random();
         characterToHeal.setHealth(Math.min(characterToHeal.getHealth() + random.nextInt(5) + 5, 100));
-    }
-
-    @Override
-    public String toString() {
-        String factionName = this.getFaction() == null ? "None" : this.getFaction().getName();
-        return this.getName() + " : Priest\n"
-                + "Health : " + this.getHealth() + "/100\n"
-                + "Faction : " + factionName;
     }
 }

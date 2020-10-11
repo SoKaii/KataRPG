@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Warrior extends Character {
@@ -6,20 +7,32 @@ public class Warrior extends Character {
     }
 
     @Override
-    void attack(Character characterToAttack) {
-        if (this.getFaction() != null &&
-                (characterToAttack.getFaction() == this.getFaction() ||
-                        this.getFaction().getFriends().contains(characterToAttack.getFaction()))) {
-            throw new UnsupportedOperationException("A character can't attack another character of his faction or friend faction");
-        }
-        if (characterToAttack.getIsAlive()) {
-            Random random = new Random();
-            characterToAttack.setHealth(characterToAttack.getHealth() - (random.nextInt(8) + 1));
-            if (characterToAttack.getHealth() <= 0) {
-                characterToAttack.setHealth(0);
+    void attack(Entity entityToAttack) {
+        if(entityToAttack instanceof Character) {
+            Character characterToAttack = (Character)entityToAttack;
+            ArrayList<Faction> factionsToNotAttack = new ArrayList<>(this.getFactions());
+            for (Faction faction : this.getFactions()) {
+                for (Faction friendFaction : faction.getFriends()) {
+                    factionsToNotAttack.add(friendFaction);
+                }
             }
+            if (this.getFactions() != null && factionsToNotAttack.contains(characterToAttack.getFactions())) {
+                throw new UnsupportedOperationException("A character can't attack another character of his faction or friend faction");
+            }
+        }
+        if (entityToAttack.isAlive()) {
+            afflictDammage(entityToAttack);
         } else {
-           throw new UnsupportedOperationException("A character can't attack a dead character");
+            throw new UnsupportedOperationException("A character can't attack a dead entity");
+
+        }
+    }
+
+    private void afflictDammage(Entity entityToDammage) {
+        Random random = new Random();
+        entityToDammage.setHealth(entityToDammage.getHealth() - (random.nextInt(8) + 1));
+        if (entityToDammage.getHealth() <= 0) {
+            entityToDammage.setHealth(0);
         }
     }
 
@@ -29,13 +42,5 @@ public class Warrior extends Character {
         } else {
             throw new UnsupportedOperationException("A warrior can only heals himself");
         }
-    }
-
-    @Override
-    public String toString() {
-        String factionName = this.getFaction() == null ? "None" : this.getFaction().getName();
-        return this.getName() + " : Warrior\n"
-                + "Health : " + this.getHealth() + "/100\n"
-                + "Faction : " + factionName;
     }
 }
