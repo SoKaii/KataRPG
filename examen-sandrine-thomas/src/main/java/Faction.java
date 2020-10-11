@@ -21,6 +21,9 @@ public class Faction {
     }
 
     void addFriend(Faction friendFaction) {
+        if(friendFaction == this){
+            throw new UnsupportedOperationException("A faction can't add itself as friend faction");
+        }
         friends.add(friendFaction);
     }
 

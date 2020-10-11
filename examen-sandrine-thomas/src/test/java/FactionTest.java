@@ -100,4 +100,32 @@ public class FactionTest {
         stormwindFaction.addFriend(ironforgeFaction);
         Assert.assertEquals(expectedList, stormwindFaction.getFriends());
     }
+
+    @Test
+    @DisplayName("A Faction can't declare itself as friend")
+    void factionAddItselfAsFriend(){
+        ArrayList<Faction> expectedList = new ArrayList<>();
+        expectedList.add(stormwindFaction);
+
+        try {
+            stormwindFaction.addFriend(stormwindFaction);
+            Assert.assertEquals(expectedList, stormwindFaction.getFriends());
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A faction can't add itself as friend faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("A Faction can remove one friend")
+    void factionRemoveOneFriend(){
+        ArrayList<Faction> expectedList = new ArrayList<>();
+        expectedList.add(darnassusFaction);
+
+        stormwindFaction.addFriend(darnassusFaction);
+        stormwindFaction.addFriend(ironforgeFaction);
+        stormwindFaction.removeFriend(ironforgeFaction);
+        Assert.assertEquals(expectedList, stormwindFaction.getFriends());
+    }
 }

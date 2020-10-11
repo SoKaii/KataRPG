@@ -67,6 +67,23 @@ public class WarriorTest {
     }
 
     @Test
+    @DisplayName("A warrior can't attack a character of a friend faction")
+    void warriorAttacksFriendFaction() {
+        orgrimmarFaction.addFriend(darkspearFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        warriorDarkspear.joinFaction(darkspearFaction);
+
+        try {
+            warriorOrgrimmar.attack(warriorDarkspear);
+            Assert.assertTrue(warriorDarkspear.getHealth() < 100);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack another character of his faction or friend faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
     @DisplayName("A warrior can kill a character of another faction")
     void warriorKills() {
         warriorOrgrimmar.joinFaction(orgrimmarFaction);

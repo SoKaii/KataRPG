@@ -11,7 +11,7 @@ public class Priest extends Character {
     }
 
     void heal(Character characterToHeal) {
-        if (characterToHeal.getFaction() != this.getFaction() && (!characterToHeal.getFaction().getFriends().contains(characterToHeal.getFaction()))) {
+        if (characterToHeal.getFaction() != this.getFaction() && (!this.getFaction().getFriends().contains(characterToHeal.getFaction()))) {
             throw new UnsupportedOperationException("A character can only heal another character of his faction or friend faction");
         }
         Random random = new Random();

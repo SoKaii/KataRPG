@@ -63,16 +63,19 @@ public class PriestTest {
         warriorOrgrimmar.joinFaction(orgrimmarFaction);
         for(int i = 0; i < 50; i++) {
             warriorOrgrimmar.setHealth(50);
-            priestDarkspear.heal(warriorOrgrimmar);
+            priestOrgrimmar.heal(warriorOrgrimmar);
             Assert.assertTrue((warriorOrgrimmar.getHealth() - 50 <= 10) && (warriorOrgrimmar.getHealth() - 50 >= 5));
         }
     }
 
-    @Test //TODO
+    @Test
     @DisplayName("A priest can heal another character of a friend's faction between 5 and 10 hp ")
     void priestHealsAnotherCharacterOfFriendFaction() {
-        priestDarkspear.joinFaction(orgrimmarFaction);
+        orgrimmarFaction.addFriend(darkspearFaction);
+        darkspearFaction.addFriend(orgrimmarFaction);
+        priestDarkspear.joinFaction(darkspearFaction);
         warriorOrgrimmar.joinFaction(orgrimmarFaction);
+
         for(int i = 0; i < 50; i++) {
             warriorOrgrimmar.setHealth(50);
             priestDarkspear.heal(warriorOrgrimmar);
