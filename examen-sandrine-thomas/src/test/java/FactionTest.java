@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FactionTest {
     Faction orgrimmarFaction;
@@ -127,5 +128,24 @@ public class FactionTest {
         stormwindFaction.addFriend(ironforgeFaction);
         stormwindFaction.removeFriend(ironforgeFaction);
         Assert.assertEquals(expectedList, stormwindFaction.getFriends());
+    }
+
+    @Test
+    @DisplayName("A character may belong to one or more factions")
+    void belongToMultipleFactions(){
+        ArrayList<Object> expectedList = new ArrayList<>();
+        expectedList.add(warriorOrgrimmar);
+
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        Assert.assertEquals(orgrimmarFaction.getMembers(), expectedList);
+
+        warriorOrgrimmar.joinFaction(darkspearFaction);
+        Assert.assertEquals(darkspearFaction.getMembers(), expectedList);
+        warriorOrgrimmar.joinFaction(darnassusFaction);
+        Assert.assertEquals(darnassusFaction.getMembers(), expectedList);
+
+        expectedList.clear();
+        expectedList.addAll(Arrays.asList(orgrimmarFaction, darkspearFaction, darnassusFaction));
+        Assert.assertEquals(warriorOrgrimmar.getFactions(), expectedList);
     }
 }
