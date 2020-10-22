@@ -19,7 +19,7 @@ public class WarriorTest {
     Character priestDarnassus;
     Character warriorDarnassus;
 
-    Entity trainingDummy;
+    Building molfenderTower;
 
     @BeforeEach
     void init() {
@@ -44,7 +44,7 @@ public class WarriorTest {
         priestDarnassus = new Priest("Tyrande Whisperwind");
 
         // Non-characters entities
-        trainingDummy = new Entity("Training Dummy");
+        molfenderTower = new Building("Training Dummy", 10000);
     }
 
     @Test
@@ -59,8 +59,9 @@ public class WarriorTest {
     @Test
     @DisplayName("A warrior can attack a non-character entity")
     void warriorAttacksNonCharacterEntity() {
-        warriorOrgrimmar.attack(trainingDummy);
-        Assert.assertTrue(trainingDummy.getHealth() < 100);
+        molfenderTower.setHealth(100);
+        warriorOrgrimmar.attack(molfenderTower);
+        Assert.assertTrue(molfenderTower.getHealth() < 100);
     }
 
     @Test
