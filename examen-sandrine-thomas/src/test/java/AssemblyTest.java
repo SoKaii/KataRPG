@@ -13,7 +13,7 @@ public class AssemblyTest {
     Faction ironforgeFaction;
 
     Assembly warriorAssembly;
-    Assembly priestAssembly;
+    Assembly hordeWarriorsAssembly;
 
     Character priestDarkspear;
     Character warriorDarkspear;
@@ -57,6 +57,7 @@ public class AssemblyTest {
         ArrayList<Class> warriorAssemblyAllowedRoles = new ArrayList<>();
         warriorAssemblyAllowedRoles.add(Warrior.class);
         warriorAssembly = new Assembly("Warriors", warriorAssemblyAllowedRoles);
+        hordeWarriorsAssembly = new Assembly("Horde Warriors", warriorAssemblyAllowedRoles);
     }
 
     @Test
@@ -67,6 +68,19 @@ public class AssemblyTest {
 
         warriorOrgrimmar.joinAssembly(warriorAssembly);
         Assert.assertEquals(warriorAssembly.getMembers(), expectedList);
+    }
+
+    @Test
+    @DisplayName("A character can't join multiple assemblies")
+    void characterCantJoinMultipleAssembly() {
+        try {
+            warriorOrgrimmar.joinAssembly(warriorAssembly);
+            warriorOrgrimmar.joinAssembly(hordeWarriorsAssembly);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "This character already belong to an assembly";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
     }
 
     @Test
@@ -81,4 +95,21 @@ public class AssemblyTest {
         }
     }
 
+    @Test
+    @DisplayName("The first character to join the assembly is the master")
+    void firstCharacterIsTheMaster() {
+        warriorOrgrimmar.joinAssembly(warriorAssembly);
+        Assert.assertEquals(warriorOrgrimmar, warriorAssembly.getMaster());
+    }
+
+    @Test
+    @DisplayName("When the master leaves the assembly, an other random character become the master")
+    void newCharacterIsTheMaster() {
+        warriorOrgrimmar.joinAssembly(warriorAssembly);
+        warriorDarkspear.joinAssembly(warriorAssembly);
+        warriorDarnassus.joinAssembly(warriorAssembly);
+        Assert.assertEquals(warriorOrgrimmar, warriorAssembly.getMaster());
+        warriorOrgrimmar.leaveAssembly(warriorAssembly);
+        Assert.assertTrue(warriorAssembly.getMaster().equals(warriorDarkspear) || warriorAssembly.getMaster().equals(warriorDarnassus) );
+    }
 }

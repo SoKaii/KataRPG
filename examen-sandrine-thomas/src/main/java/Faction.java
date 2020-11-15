@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Faction {
 
-    private final String name;
+    private String name;
     private final ArrayList<Character> members;
     private final ArrayList<Faction> friends;
 
@@ -33,6 +33,10 @@ public class Faction {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ArrayList<Character> getMembers() {
