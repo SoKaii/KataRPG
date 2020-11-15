@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Warrior extends Character {
@@ -10,11 +11,9 @@ public class Warrior extends Character {
     void attack(Entity entityToAttack) {
         if(entityToAttack instanceof Character) {
             Character characterToAttack = (Character)entityToAttack;
-            ArrayList<Faction> factionsToNotAttack = new ArrayList<>(this.getFactions());
+            List<Faction> factionsToNotAttack = new ArrayList<>(this.getFactions());
             for (Faction faction : this.getFactions()) {
-                for (Faction friendFaction : faction.getFriends()) {
-                    factionsToNotAttack.add(friendFaction);
-                }
+                factionsToNotAttack.addAll(faction.getFriends());
             }
             if (this.getFactions() != null && factionsToNotAttack.contains(characterToAttack.getFactions())) {
                 throw new UnsupportedOperationException("A character can't attack another character of his faction or friend faction");
@@ -30,10 +29,7 @@ public class Warrior extends Character {
 
     private void afflictDammage(Entity entityToDammage) {
         Random random = new Random();
-        entityToDammage.setHealth(entityToDammage.getHealth() - (random.nextInt(8) + 1));
-        if (entityToDammage.getHealth() <= 0) {
-            entityToDammage.setHealth(0);
-        }
+        entityToDammage.setHealth(Math.max(entityToDammage.getHealth() - (random.nextInt(8) + 1), 0));
     }
 
     void heal(Character characterToHeal) {

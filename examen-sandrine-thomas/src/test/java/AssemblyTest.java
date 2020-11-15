@@ -4,66 +4,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class AssemblyTest {
-    Faction orgrimmarFaction;
-    Faction stormwindFaction;
-    Faction darkspearFaction;
-    Faction darnassusFaction;
-    Faction ironforgeFaction;
-
-    Assembly warriorAssembly;
-    Assembly hordeWarriorsAssembly;
-
-    Character priestDarkspear;
-    Character warriorDarkspear;
-    Character priestOrgrimmar;
-    Character warriorOrgrimmar;
-
-    Character priestStormwind;
-    Character warriorStormwind;
-    Character priestDarnassus;
-    Character warriorDarnassus;
-    Character priestIronforge;
-    Character warriorIronforge;
+public class AssemblyTest extends Data{
 
     @BeforeEach
-    void init() {
-        // Horde factions
-        orgrimmarFaction = new Faction("Orgrimmar");
-        darkspearFaction = new Faction("Darkspear Trolls");
-
-        // Alliance factions
-        stormwindFaction = new Faction("Stormwind");
-        darnassusFaction = new Faction("Darnassus");
-        ironforgeFaction = new Faction("Ironforge");
-
-        // Horde characters
-        warriorOrgrimmar = new Warrior("Garrosh Hellscream");
-        priestOrgrimmar = new Priest("Tyelis");
-        warriorDarkspear = new Warrior("Paal'gajuk");
-        priestDarkspear = new Priest("Talanji");
-
-        // Alliance characters
-        warriorStormwind = new Warrior("Varian Wrynn");
-        priestStormwind = new Priest("Anduin Wrynn");
-        warriorDarnassus = new Warrior("Sildanair");
-        priestDarnassus = new Priest("Tyrande Whisperwind");
-        warriorIronforge = new Warrior("Muradin Bronzebeard");
-        priestIronforge = new Priest("Moira Thaurissan");
-
-        // Assemblies
-
-        ArrayList<Class> warriorAssemblyAllowedRoles = new ArrayList<>();
-        warriorAssemblyAllowedRoles.add(Warrior.class);
-        warriorAssembly = new Assembly("Warriors", warriorAssemblyAllowedRoles);
-        hordeWarriorsAssembly = new Assembly("Horde Warriors", warriorAssemblyAllowedRoles);
+    void initData() {
+        super.init();
     }
 
     @Test
     @DisplayName("A character can join an assembly")
     void characterCanJoinAssembly() {
-        ArrayList<Character> expectedList = new ArrayList<>();
+        List<Character> expectedList = new ArrayList<>();
         expectedList.add(warriorOrgrimmar);
 
         warriorOrgrimmar.joinAssembly(warriorAssembly);

@@ -4,44 +4,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CharacterTest {
-    Faction orgrimmarFaction;
-    Faction stormwindFaction;
-    Faction darkspearFaction;
-    Faction darnassusFaction;
-
-    Character priestDarkspear;
-    Character warriorDarkspear;
-    Character priestOrgrimmar;
-    Character warriorOrgrimmar;
-
-    Character priestStormwind;
-    Character warriorStormwind;
-    Character priestDarnassus;
-    Character warriorDarnassus;
+public class CharacterTest extends Data{
 
     @BeforeEach
-    void init() {
-        // Horde factions
-        orgrimmarFaction = new Faction("Orgrimmar");
-        darkspearFaction = new Faction("Darkspear Trolls");
-
-        // Alliance factions
-        stormwindFaction = new Faction("Stormwind");
-        darnassusFaction = new Faction("Darnassus");
-
-        // Horde characters
-        warriorOrgrimmar = new Warrior("Garrosh Hellscream");
-        priestOrgrimmar = new Priest("Tyelis");
-        warriorDarkspear = new Warrior("Paal'gajuk");
-        priestDarkspear = new Priest("Talanji");
-
-        // Alliance characters
-        warriorStormwind = new Warrior("Varian Wrynn");
-        priestStormwind = new Priest("Anduin Wrynn");
-        warriorDarnassus = new Warrior("Sildanair");
-        priestDarnassus = new Priest("Tyrande Whisperwind");
+    void initData() {
+        super.init();
     }
 
     @Test
@@ -67,7 +36,7 @@ public class CharacterTest {
     @Test
     @DisplayName("A character can join a faction")
     void characterJoinFaction() {
-        ArrayList<Character> expectedList = new ArrayList<>();
+        List<Character> expectedList = new ArrayList<>();
         Assert.assertEquals(expectedList, orgrimmarFaction.getMembers());
         priestDarkspear.joinFaction(orgrimmarFaction);
         expectedList.add(priestDarkspear);
@@ -93,7 +62,7 @@ public class CharacterTest {
     @Test
     @DisplayName("A character can leave a faction")
     void characterLeaveFaction() {
-        ArrayList<Character> expectedList = new ArrayList<>();
+        List<Character> expectedList = new ArrayList<>();
         expectedList.add(priestDarkspear);
         priestDarkspear.joinFaction(darkspearFaction);
         Assert.assertEquals(expectedList, darkspearFaction.getMembers());
@@ -116,5 +85,78 @@ public class CharacterTest {
             Assert.assertEquals(expectedException, re.getMessage());
         }
 
+    }
+
+    @Test
+    @DisplayName("A character can attack a character of another faction")
+    void characterAttacks() {
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        priestStormwind.joinFaction(stormwindFaction);
+        warriorOrgrimmar.attack(priestStormwind);
+        Assert.assertTrue(priestStormwind.getHealth() < 100);
+    }
+
+    @Test
+    @DisplayName("A character can attack a non-character entity")
+    void characterAttacksNonCharacterEntity() {
+        molfenderTower.setHealth(100);
+        warriorOrgrimmar.attack(molfenderTower);
+        Assert.assertTrue(molfenderTower.getHealth() < 100);
+    }
+
+    @Test
+    @DisplayName("A character can't attack a dead entity")
+    void characterAttacksDeadCharacter() {
+        warriorDarnassus.setHealth(0);
+        try {
+            warriorOrgrimmar.attack(warriorDarnassus);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack a dead entity";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("A character can't attack a character of his faction")
+    void characterAttacksFaction() {
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        priestOrgrimmar.joinFaction(orgrimmarFaction);
+        try {
+            warriorOrgrimmar.attack(priestOrgrimmar);
+            Assert.assertTrue(priestOrgrimmar.getHealth() < 100);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack another character of his faction or friend faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("A character can't attack a character of a friend faction")
+    void characterAttacksFriendFaction() {
+        orgrimmarFaction.addFriend(darkspearFaction);
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        warriorDarkspear.joinFaction(darkspearFaction);
+
+        try {
+            warriorOrgrimmar.attack(warriorDarkspear);
+            Assert.assertTrue(warriorDarkspear.getHealth() < 100);
+        }
+        catch (RuntimeException re) {
+            String expectedException = "A character can't attack another character of his faction or friend faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("A character can kill a character of another faction")
+    void characterKills() {
+        warriorOrgrimmar.joinFaction(orgrimmarFaction);
+        priestStormwind.joinFaction(stormwindFaction);
+        priestStormwind.setHealth(1);
+        Assert.assertTrue(priestStormwind.isAlive());
+        warriorOrgrimmar.attack(priestStormwind);
+        Assert.assertFalse(priestStormwind.isAlive());
     }
 }

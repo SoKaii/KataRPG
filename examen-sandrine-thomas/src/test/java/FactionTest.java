@@ -4,56 +4,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class FactionTest {
-    Faction orgrimmarFaction;
-    Faction stormwindFaction;
-    Faction darkspearFaction;
-    Faction darnassusFaction;
-    Faction ironforgeFaction;
-
-    Character priestDarkspear;
-    Character warriorDarkspear;
-    Character priestOrgrimmar;
-    Character warriorOrgrimmar;
-
-    Character priestStormwind;
-    Character warriorStormwind;
-    Character priestDarnassus;
-    Character warriorDarnassus;
-    Character priestIronforge;
-    Character warriorIronforge;
+public class FactionTest extends Data{
 
     @BeforeEach
-    void init() {
-        // Horde factions
-        orgrimmarFaction = new Faction("Orgrimmar");
-        darkspearFaction = new Faction("Darkspear Trolls");
-
-        // Alliance factions
-        stormwindFaction = new Faction("Stormwind");
-        darnassusFaction = new Faction("Darnassus");
-        ironforgeFaction = new Faction("Ironforge");
-
-        // Horde characters
-        warriorOrgrimmar = new Warrior("Garrosh Hellscream");
-        priestOrgrimmar = new Priest("Tyelis");
-        warriorDarkspear = new Warrior("Paal'gajuk");
-        priestDarkspear = new Priest("Talanji");
-
-        // Alliance characters
-        warriorStormwind = new Warrior("Varian Wrynn");
-        priestStormwind = new Priest("Anduin Wrynn");
-        warriorDarnassus = new Warrior("Sildanair");
-        priestDarnassus = new Priest("Tyrande Whisperwind");
-        warriorIronforge = new Warrior("Muradin Bronzebeard");
-        priestIronforge = new Priest("Moira Thaurissan");
+    void initData() {
+        super.init();
     }
 
     @Test
     @DisplayName("A faction have a name and a list of members")
     void factionExists() {
-        ArrayList<Character> emptyList = new ArrayList<>();
+        List<Character> emptyList = new ArrayList<>();
         Assert.assertEquals("Orgrimmar", orgrimmarFaction.getName());
         Assert.assertEquals(emptyList, orgrimmarFaction.getMembers());
     }
@@ -61,7 +24,7 @@ public class FactionTest {
     @Test
     @DisplayName("A character can be added to a faction")
     void factionAddMember() {
-        ArrayList<Character> expectedList = new ArrayList<>();
+        List<Character> expectedList = new ArrayList<>();
         expectedList.add(warriorOrgrimmar);
 
         orgrimmarFaction.addMember(warriorOrgrimmar);
@@ -71,7 +34,7 @@ public class FactionTest {
     @Test
     @DisplayName("A character can be removed from a faction")
     void factionRemoveMember() {
-        ArrayList<Character> expectedList = new ArrayList<>();
+        List<Character> expectedList = new ArrayList<>();
         expectedList.add(warriorOrgrimmar);
 
         orgrimmarFaction.addMember(warriorOrgrimmar);
@@ -81,9 +44,22 @@ public class FactionTest {
     }
 
     @Test
+    @DisplayName("A character can't leave a faction that it don't belong")
+    void characterCantLeaveANotJoinedFaction(){
+        try {
+            warriorOrgrimmar.joinFaction(orgrimmarFaction);
+            warriorOrgrimmar.leaveFaction(darnassusFaction);
+        } catch (RuntimeException re){
+            String expectedException = "This character doesn't belong to this faction";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+
+    }
+
+    @Test
     @DisplayName("A Faction can declare one friend")
     void factionAddOneFriend(){
-        ArrayList<Faction> expectedList = new ArrayList<>();
+        List<Faction> expectedList = new ArrayList<>();
         expectedList.add(darnassusFaction);
 
         stormwindFaction.addFriend(darnassusFaction);
@@ -93,7 +69,7 @@ public class FactionTest {
     @Test
     @DisplayName("A Faction can declare multiple friends")
     void factionAddMultipleFriend(){
-        ArrayList<Faction> expectedList = new ArrayList<>();
+        List<Faction> expectedList = new ArrayList<>();
         expectedList.add(darnassusFaction);
         expectedList.add(ironforgeFaction);
 
@@ -105,7 +81,7 @@ public class FactionTest {
     @Test
     @DisplayName("A Faction can't declare itself as friend")
     void factionAddItselfAsFriend(){
-        ArrayList<Faction> expectedList = new ArrayList<>();
+        List<Faction> expectedList = new ArrayList<>();
         expectedList.add(stormwindFaction);
 
         try {
@@ -121,7 +97,7 @@ public class FactionTest {
     @Test
     @DisplayName("A Faction can remove one friend")
     void factionRemoveOneFriend(){
-        ArrayList<Faction> expectedList = new ArrayList<>();
+        List<Faction> expectedList = new ArrayList<>();
         expectedList.add(darnassusFaction);
 
         stormwindFaction.addFriend(darnassusFaction);
@@ -133,7 +109,7 @@ public class FactionTest {
     @Test
     @DisplayName("A character may belong to one or more factions")
     void belongToMultipleFactions(){
-        ArrayList<Object> expectedList = new ArrayList<>();
+        List<Object> expectedList = new ArrayList<>();
         expectedList.add(warriorOrgrimmar);
 
         warriorOrgrimmar.joinFaction(orgrimmarFaction);

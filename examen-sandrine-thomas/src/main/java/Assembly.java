@@ -1,16 +1,17 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Assembly extends Faction {
 
-    private ArrayList<Class> allowedRoles;
+    private List<Class> allowedRoles;
     private Character master;
 
-    public Assembly(String name, ArrayList<Class> allowedRoles) {
+    public Assembly(String name, List<Class> allowedRoles) {
         super(name);
         this.allowedRoles = allowedRoles;
     }
 
-    public ArrayList<Class> getAllowedRoles() {
+    public List<Class> getAllowedRoles() {
         return allowedRoles;
     }
 
@@ -38,10 +39,6 @@ public class Assembly extends Faction {
         } else if (memberToRemove.equals(this.master)) {
             this.master = this.getMembers().get((int) (Math.random() * this.getMembers().size()));
         }
-    }
-
-    public void setAllowedRoles(ArrayList<Class> allowedRoles) {
-        this.allowedRoles = allowedRoles;
     }
 
     public Character getMaster() {
