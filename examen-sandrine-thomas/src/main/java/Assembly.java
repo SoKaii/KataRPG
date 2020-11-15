@@ -33,7 +33,9 @@ public class Assembly extends Faction {
     @Override
     void removeMember(Character memberToRemove) {
         super.removeMember(memberToRemove);
-        if (memberToRemove.equals(this.master) && !this.getMembers().isEmpty()) {
+        if(this.getMembers().isEmpty()){
+            this.master = null;
+        } else if (memberToRemove.equals(this.master)) {
             this.master = this.getMembers().get((int) (Math.random() * this.getMembers().size()));
         }
     }

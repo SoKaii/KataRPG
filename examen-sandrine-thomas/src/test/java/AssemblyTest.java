@@ -112,4 +112,28 @@ public class AssemblyTest {
         warriorOrgrimmar.leaveAssembly(warriorAssembly);
         Assert.assertTrue(warriorAssembly.getMaster().equals(warriorDarkspear) || warriorAssembly.getMaster().equals(warriorDarnassus) );
     }
+
+    @Test
+    @DisplayName("Master is the last to leave the assembly, assembly has no master")
+    void lastCharacterToLeave() {
+        warriorDarnassus.joinAssembly(warriorAssembly);
+        Assert.assertEquals(warriorDarnassus, warriorAssembly.getMaster());
+        warriorDarnassus.leaveAssembly(warriorAssembly);
+        Assert.assertNull(warriorAssembly.getMaster());
+    }
+
+    @Test
+    @DisplayName("Only Master can change name of an Assembly")
+    void onlyMasterChangeName() {
+        warriorDarnassus.joinAssembly(warriorAssembly);
+        warriorOrgrimmar.joinAssembly(warriorAssembly);
+        try {
+            warriorAssembly.setName("xX-DarkSasukes-Xx", warriorDarnassus);
+            Assert.assertEquals(warriorAssembly.getName(), "xX-DarkSasukes-Xx");
+            warriorAssembly.setName("xX-DarkNarutos-Xx", warriorOrgrimmar);
+        } catch (RuntimeException re) {
+            String expectedException = "Only the master can modify the name of the assembly";
+            Assert.assertEquals(expectedException, re.getMessage());
+        }
+    }
 }
